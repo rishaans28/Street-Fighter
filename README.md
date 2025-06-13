@@ -8,5 +8,5 @@ Controls for Player 1:
 Controls for Player 2:
   Left arrow/Right arrow: Move left/right
   Down arrow: Duck
-  R-Shift: Punch
-  Space: Kick
+  R-Shift: Kick
+  Space: Punch
