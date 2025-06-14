@@ -17,8 +17,9 @@ class Game:
         self.background = pygame.transform.scale(self.background, (1350, 800))
         self.all_sprites = pygame.sprite.Group()
         self.player1 = Player1((100,550), self.all_sprites, None)
-        self.player2 = Player2((1200,550), self.all_sprites, self.player1)
-        self.player1.player2 = self.player2
+        self.player2 = Player2((1200,550), self.all_sprites, None)
+        self.player1.opponent = self.player2
+        self.player2.opponent = self.player1
         self.player1_wins_img = pygame.image.load(join("Images", "player1wins.png"))
         self.player1_wins_rect = self.player1_wins_img.get_frect(center = (1350/2, 800/2))
         self.player2_wins_img = pygame.image.load(join("Images", "player2wins.png"))
@@ -64,7 +65,6 @@ class Game:
         self.show_countdown()
         while self.running:
             dt = self.clock.tick() / 1000
-            print(self.clock.get_fps())
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
