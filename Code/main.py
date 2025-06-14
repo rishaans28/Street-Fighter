@@ -17,8 +17,9 @@ class Game:
         self.background = pygame.transform.scale(self.background, (1350, 800))
         self.all_sprites = pygame.sprite.Group()
         self.punch_sound = pygame.mixer.Sound(join("Audio", "punch.mp3"))
-        self.player1 = Player1((100,550), self.all_sprites, None, self.punch_sound)
-        self.player2 = Player2((1200,550), self.all_sprites, None, self.punch_sound)
+        self.kick_sound = pygame.mixer.Sound(join("Audio", "kick.mp3"))
+        self.player1 = Player1((100,550), self.all_sprites, None, self.punch_sound, self.kick_sound)
+        self.player2 = Player2((1200,550), self.all_sprites, None, self.punch_sound, self.kick_sound)
         self.player1.opponent = self.player2
         self.player2.opponent = self.player1
         self.player1_wins_img = pygame.image.load(join("Images", "player1wins.png"))
