@@ -3,7 +3,7 @@ from os.path import join
 from custom_timer import Timer
 
 class BasePlayer(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, opponent, idle_img, punch_img, kick_img, duck_size, controls, duck_y, health_bar_y, winner_name):
+    def __init__(self, pos, groups, opponent, idle_img, punch_img, kick_img, duck_size, controls, duck_y, health_bar_y, winner_name, punch_sound):
         super().__init__(groups)
         self.opponent = opponent
         self.pos = pos
@@ -29,6 +29,8 @@ class BasePlayer(pygame.sprite.Sprite):
         self.duck_y = duck_y
         self.health_bar_y = health_bar_y
         self.winner_name = winner_name
+        self.punch_sound = punch_sound
+        self.punch_landed = False
 
     def display_health_bar(self, screen):
         if self.health >= 100:
@@ -68,6 +70,9 @@ class BasePlayer(pygame.sprite.Sprite):
                 return
             if self.image == self.punch_state and self.opponent.image == self.opponent.punch_state:
                 return
+            if self.image == self.punch_state and not self.punch_landed:
+                self.punch_landed = True
+                self.punch_sound.play()
             self.opponent.health -= 1
 
     def input(self, dt):
@@ -89,6 +94,7 @@ class BasePlayer(pygame.sprite.Sprite):
             self.mask = pygame.mask.from_surface(self.image)
             self.rect = self.image.get_frect(center=self.rect.center)
             self.rect.centery = self.health_bar_y
+            self.punch_landed = False
             self.reset_timer.activate()
         if keys[self.controls['duck']] and self.can_attack:
             self.can_attack = False
@@ -109,7 +115,7 @@ class BasePlayer(pygame.sprite.Sprite):
         self.display_health_bar(screen)
 
 class Player1(BasePlayer):
-    def __init__(self, pos, groups, player2):
+    def __init__(self, pos, groups, player2, punch_sound):
         controls = {
             'left': pygame.K_a,
             'right': pygame.K_d,
@@ -126,11 +132,12 @@ class Player1(BasePlayer):
             controls=controls,
             duck_y=650,
             health_bar_y=550,
-            winner_name="player2"
+            winner_name="player2",
+            punch_sound=punch_sound
         )
 
 class Player2(BasePlayer):
-    def __init__(self, pos, groups, player1):
+    def __init__(self, pos, groups, player1, punch_sound):
         controls = {
             'left': pygame.K_LEFT,
             'right': pygame.K_RIGHT,
@@ -147,5 +154,6 @@ class Player2(BasePlayer):
             controls=controls,
             duck_y=650,
             health_bar_y=550,
-            winner_name="player1"
+            winner_name="player1",
+            punch_sound=punch_sound
         )
