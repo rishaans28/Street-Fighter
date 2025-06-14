@@ -19,6 +19,10 @@ class Game:
         self.player1 = Player1((100,550), self.all_sprites, None)
         self.player2 = Player2((1200,550), self.all_sprites, self.player1)
         self.player1.player2 = self.player2
+        self.player1_wins_img = pygame.image.load(join("Images", "player1wins.png"))
+        self.player1_wins_rect = self.player1_wins_img.get_frect(center = (1350/2, 800/2))
+        self.player2_wins_img = pygame.image.load(join("Images", "player2wins.png"))
+        self.player2_wins_rect = self.player2_wins_img.get_frect(center = (1350/2, 800/2))
 
     def show_countdown(self):
         self.one = pygame.image.load(join("Images", "1.png"))
@@ -49,17 +53,25 @@ class Game:
                 self.all_sprites.draw(self.display_surface)
                 self.display_surface.blit(img, rect)
                 pygame.display.update()
+    
+    def display_winner(self):
+        if self.player1.winner == "player2":
+            self.display_surface.blit(self.player2_wins_img, self.player2_wins_rect)
+        if self.player2.winner == "player1":
+            self.display_surface.blit(self.player1_wins_img, self.player1_wins_rect)
 
     def run(self):
-        dt = self.clock.tick() / 1000
         self.show_countdown()
         while self.running:
+            dt = self.clock.tick() / 1000
+            print(self.clock.get_fps())
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
             self.display_surface.blit(self.background, (0,0))
             self.all_sprites.draw(self.display_surface)
             self.all_sprites.update(dt, self.display_surface)
+            self.display_winner()
             pygame.display.update()
         pygame.quit()
 
