@@ -7,7 +7,7 @@ class Player1(pygame.sprite.Sprite):
         super().__init__(groups)
         self.player2 = player2
         self.pos = pos
-        self.speed = 150
+        self.speed = 200
         self.health = 200
         self.idle_stance = pygame.image.load(join("Images", "ryu_idle_stance.png")).convert_alpha()
         self.punch_state = pygame.image.load(join("Images", "ryu_punch.png")).convert_alpha()
@@ -18,21 +18,27 @@ class Player1(pygame.sprite.Sprite):
         self.is_attacking = False
         self.is_ducking = False
         self.can_attack = True
+        self.winner = None
         self.rect = self.image.get_frect(center=pos)
         self.direction = pygame.Vector2()
         self.reset_timer = Timer(1000, self.reset_image, False, False)
         self.attack_timer = Timer(1000, self.reset_attack, False, False)
-    
-    def display_health_bar(self, screen):
         self.health_bar = pygame.Surface((self.health, 20))
         self.health_bar_rect = self.health_bar.get_frect(midbottom = (self.rect.centerx, self.rect.top - 20))
+
+    def display_health_bar(self, screen):
         if self.health >= 100 and self.health <= 200:
-            pygame.Surface.fill(self.health_bar, (0,255,0))
+            color = (0,255,0)
         elif self.health < 100 and self.health >= 50:
-            pygame.Surface.fill(self.health_bar, (255,255,0))
+            color = (255,255,0)
         elif self.health < 50:
-            pygame.Surface.fill(self.health_bar, (255,0,0))
-        screen.blit(self.health_bar, self.health_bar_rect)
+            color = (255,0,0)
+        bar_rect = pygame.Rect(0,0,self.health,20)
+        bar_rect.midbottom = (self.rect.centerx, self.rect.top - 20)
+        pygame.draw.rect(screen, color, bar_rect)
+        if self.health <= 1:
+            self.kill()
+            self.winner = "player2"
     
     def reset_image(self):
         self.is_attacking = False
@@ -99,7 +105,7 @@ class Player2(pygame.sprite.Sprite):
         super().__init__(groups)
         self.player1 = player1
         self.pos = pos
-        self.speed = 150
+        self.speed = 200
         self.health = 200
         self.direction = pygame.Vector2()
         self.idle_stance = pygame.image.load(join("Images", "ken_idle_stance.png")).convert_alpha()
@@ -109,25 +115,28 @@ class Player2(pygame.sprite.Sprite):
         self.is_attacking = False
         self.is_ducking = False
         self.can_attack = True
+        self.winner = None
         self.image = self.idle_stance
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_frect(center=pos)
         self.reset_timer = Timer(1000, self.reset_image, False, False)
         self.attack_timer = Timer(1000, self.reset_attack, False, False)
+        self.health_bar = pygame.Surface((self.health, 20))
+        self.health_bar_rect = self.health_bar.get_frect(midbottom = (self.rect.centerx, self.rect.top - 20))
     
     def display_health_bar(self, screen):
-        self.health_bar = pygame.Surface((self.health, 20))
-        if not self.image == self.kick_state:
-            self.health_bar_rect = self.health_bar.get_frect(midbottom = (self.rect.centerx, self.rect.top - 20))
-        else:
-            self.health_bar_rect = self.health_bar.get_frect(midbottom = (self.rect.centerx + 150, self.rect.top - 20))
         if self.health >= 100 and self.health <= 200:
-            pygame.Surface.fill(self.health_bar, (0,255,0))
+            color = (0,255,0)
         elif self.health < 100 and self.health >= 50:
-            pygame.Surface.fill(self.health_bar, (255,255,0))
+            color = (255,255,0)
         elif self.health < 50:
-            pygame.Surface.fill(self.health_bar, (255,0,0))
-        screen.blit(self.health_bar, self.health_bar_rect)
+            color = (255,0,0)
+        bar_rect = pygame.Rect(0,0,self.health,20)
+        bar_rect.midbottom = (self.rect.centerx, self.rect.top - 20)
+        pygame.draw.rect(screen, color, bar_rect)
+        if self.health <= 1:
+            self.kill()
+            self.winner = "player1"
 
     def reset_image(self):
         self.is_attacking = False
