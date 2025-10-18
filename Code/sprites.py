@@ -4,7 +4,7 @@ from custom_timer import Timer
 from random import randint, choice
 
 class BasePlayer(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, opponent, player, idle_img, punch_img, kick_img, duck_size, controls, duck_y, health_bar_y, winner_name, punch_sound, kick_sound):
+    def __init__(self, pos, groups, opponent, player, idle_img, punch_img, kick_img, duck_img, controls, duck_y, health_bar_y, winner_name, punch_sound, kick_sound):
         super().__init__(groups)
         self.opponent = opponent
         self.player = player
@@ -15,7 +15,7 @@ class BasePlayer(pygame.sprite.Sprite):
         self.idle_stance = pygame.image.load(join("Images", idle_img)).convert_alpha()
         self.punch_state = pygame.image.load(join("Images", punch_img)).convert_alpha()
         self.kick_state = pygame.image.load(join("Images", kick_img)).convert_alpha()
-        self.duck_state = pygame.transform.scale(self.idle_stance, duck_size).convert_alpha()
+        self.duck_state = pygame.image.load(join("Images", duck_img)).convert_alpha()
         self.is_attacking = False
         self.can_attack = True
         self.winner = None
@@ -155,7 +155,7 @@ class Player1(BasePlayer):
             idle_img="ryu_idle_stance.png",
             punch_img="ryu_punch.png",
             kick_img="ryu_kick.png",
-            duck_size=(231, 200),
+            duck_img="ryu_duck.png",
             controls=controls,
             duck_y=650,
             health_bar_y=550,
@@ -180,7 +180,7 @@ class Player2(BasePlayer):
             idle_img="ken_idle_stance.png",
             punch_img="ken_punch.png",
             kick_img="ken_kick.png",
-            duck_size=(232, 200),
+            duck_img="ken_duck.png",
             controls=controls,
             duck_y=650,
             health_bar_y=550,
@@ -195,7 +195,7 @@ class Player2CPU(pygame.sprite.Sprite):
         self.idle_stance = pygame.image.load(join("Images", "ken_idle_stance.png")).convert_alpha()
         self.punch_state = pygame.image.load(join("Images", "ken_punch.png")).convert_alpha()
         self.kick_state = pygame.image.load(join("Images", "ken_kick.png")).convert_alpha()
-        self.duck_state = pygame.transform.scale(self.idle_stance, (232,200)).convert_alpha()
+        self.duck_state = pygame.image.load(join("Images", "ken_duck.png")).convert_alpha()
         self.direction = pygame.Vector2()
         self.image = self.idle_stance
         self.rect = self.image.get_frect(center = pos)
