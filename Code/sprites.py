@@ -74,7 +74,7 @@ class BasePlayer(pygame.sprite.Sprite):
                 return
             if self.image == self.punch_state and self.opponent.image == self.opponent.punch_state:
                 return
-            if self.image == self.kick_state and self.opponent.image == self.opponent.punch_state:
+            if self.image == self.punch_state and self.opponent.image == self.opponent.kick_state:
                 self.opponent.health -= 25 * dt
                 if not self.kick_landed:
                     self.kick_landed = True
@@ -273,7 +273,7 @@ class Player2CPU(pygame.sprite.Sprite):
                 return
             if self.image == self.punch_state and self.opponent.image == self.opponent.punch_state:
                 return
-            if self.image == self.kick_state and self.opponent.image == self.opponent.punch_state:
+            if self.image == self.punch_state and self.opponent.image == self.opponent.kick_state:
                 self.opponent.health -= 25 * dt
                 if not self.kick_landed:
                     self.kick_landed = True
